@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Carta secreta</title>
+
+<style>
+
+body{
+background:#000000;
+color:white;
+text-align:center;
+font-family:Arial;
+margin-top:100px;
+overflow:hidden;
+}
+
+/* LOGIN */
+
+#login{
+margin-top:100px;
+}
+
+input{
+padding:10px;
+margin:5px;
+}
+
+button{
+padding:10px 20px;
+cursor:pointer;
+}
+
+/* CARTA */
+
+#mensaje{
+display:none;
+}
+
+.carta{
+font-family:"Book Antiqua", serif;
+font-weight:bold;
+font-size:20px;
+width:70%;
+margin:auto;
+line-height:1.6;
+min-height:200px;
+}
+
+.att{
+font-family:"Segoe UI Black", sans-serif;
+font-size:22px;
+margin-top:30px;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="login">
+
+<h2>Acceso secreto 🔐</h2>
+
+<input type="text" id="user" placeholder="Usuario"><br>
+<input type="password" id="pass" placeholder="Contraseña"><br>
+
+<button onclick="login()">Entrar</button>
+
+</div>
+
+<div id="mensaje">
+
+<div id="texto" class="carta"></div>
+
+<div class="att">
+ATT: EL CRACK, IDOLO, GUAPO, ASOMBROZO DE TU AMIGUITO.
+</div>
+
+</div>
+
+<canvas id="estrellas"></canvas>
+
+<script>
+
+var carta = `Holaa, Ojos lindos, espero que este día este lleno de bendiciones especiales ya que es un día especial, es tu cumpleaños, quiero felicitarte por esta cartita, ¡FELIZ CUMPLEAÑOS EVANGELINE!
+
+Quiero decirte en lo personal que jamás cambies eres una persona muy carismática, linda, enojona, chillona entre otras cosas que te complementan y te hacen especial, gracias por el poco tiempo que llevamos conociéndonos, me has sacado risas y canas verdes, te considero una amiga muy cercana a mí que sin dudarlo te diría mis problemas, te quiero mucho mucho mucho amiguita.`;
+
+
+function login(){
+
+var usuario="evangeline";
+var contraseña="cumple";
+
+var u=document.getElementById("user").value;
+var p=document.getElementById("pass").value;
+
+if(u==usuario && p==contraseña){
+
+document.getElementById("login").style.display="none";
+document.getElementById("mensaje").style.display="block";
+
+escribirTexto();
+estrellas();
+
+}else{
+
+alert("Usuario o contraseña incorrectos");
+
+}
+
+}
+
+/* TEXTO QUE SE ESCRIBE */
+
+function escribirTexto(){
+
+let i = 0;
+let velocidad = 35;
+let texto = document.getElementById("texto");
+
+function escribir(){
+
+if(i < carta.length){
+
+texto.innerHTML += carta.charAt(i);
+i++;
+
+setTimeout(escribir, velocidad);
+
+}
+
+}
+
+escribir();
+
+}
+
+/* ESTRELLITAS */
+
+function estrellas(){
+
+const canvas = document.getElementById("estrellas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for(let i=0;i<120;i++){
+
+stars.push({
+x: Math.random()*canvas.width,
+y: Math.random()*canvas.height,
+size: Math.random()*2+1,
+speed: Math.random()*1+0.3
+});
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+for(let i=0;i<stars.length;i++){
+
+let s = stars[i];
+
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+ctx.fill();
+
+}
+
+update();
+
+}
+
+function update(){
+
+for(let i=0;i<stars.length;i++){
+
+let s = stars[i];
+
+s.y += s.speed;
+
+if(s.y > canvas.height){
+
+s.y = 0;
+s.x = Math.random()*canvas.width;
+
+}
+
+}
+
+}
+
+setInterval(draw,20);
+
+}
+
+</script>
+
+</body>
+</html>
