@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Carta secreta</title>
 
 <style>
@@ -11,28 +13,50 @@ background:#000000;
 color:white;
 text-align:center;
 font-family:Arial;
-margin-top:100px;
+margin:0;
+padding:20px;
 overflow:hidden;
 }
 
 /* LOGIN */
-
 #login{
-margin-top:100px;
+margin-top:80px;
 }
 
 input{
-padding:10px;
-margin:5px;
+padding:12px;
+margin:8px;
+width:80%;
+max-width:300px;
+font-size:16px;
+border-radius:8px;
+border:none;
 }
 
 button{
-padding:10px 20px;
+padding:12px 25px;
+font-size:16px;
+border-radius:10px;
+border:none;
+background:#ff4d6d;
+color:white;
+}
+
+/* REGALO */
+#regalo{
+font-size:70px;
 cursor:pointer;
+animation: brincar 1s infinite;
+margin-top:40px;
+}
+
+@keyframes brincar{
+0%{transform:translateY(0);}
+50%{transform:translateY(-20px);}
+100%{transform:translateY(0);}
 }
 
 /* CARTA */
-
 #mensaje{
 display:none;
 }
@@ -40,8 +64,8 @@ display:none;
 .carta{
 font-family:"Book Antiqua", serif;
 font-weight:bold;
-font-size:20px;
-width:70%;
+font-size:18px;
+width:90%;
 margin:auto;
 line-height:1.6;
 min-height:200px;
@@ -49,8 +73,14 @@ min-height:200px;
 
 .att{
 font-family:"Segoe UI Black", sans-serif;
-font-size:22px;
+font-size:20px;
 margin-top:30px;
+}
+
+/* INPUT BONITO (segunda contraseña) */
+#segundaClaveBox{
+display:none;
+margin-top:50px;
 }
 
 canvas{
@@ -61,30 +91,40 @@ pointer-events:none;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="login">
-
 <h2>Acceso secreto 🔐</h2>
 
 <input type="text" id="user" placeholder="Usuario"><br>
 <input type="password" id="pass" placeholder="Contraseña"><br>
 
 <button onclick="login()">Entrar</button>
-
 </div>
 
-<div id="mensaje">
+<!-- REGALO -->
+<div id="regaloBox" style="display:none;">
+<h2>Tengo algo para ti 🎁</h2>
+<div id="regalo" onclick="mostrarSegundaClave()">🎁</div>
+</div>
 
+<!-- SEGUNDA CONTRASEÑA BONITA -->
+<div id="segundaClaveBox">
+<h3>Ups... contraseña 👀</h3>
+<input type="password" id="segundaClave" placeholder="Escríbela aquí"><br>
+<button onclick="verificarSegundaClave()">Abrir regalo</button>
+</div>
+
+<!-- MENSAJE -->
+<div id="mensaje">
 <div id="texto" class="carta"></div>
 
 <div class="att">
 ATT: EL CRACK, IDOLO, GUAPO, ASOMBROZO DE TU AMIGUITO.
 </div>
-
 </div>
 
 <canvas id="estrellas"></canvas>
@@ -96,6 +136,7 @@ var carta = `Holaa, Ojos lindos, espero que este día este lleno de bendiciones 
 Quiero decirte en lo personal que jamás cambies eres una persona muy carismática, linda, enojona, chillona entre otras cosas que te complementan y te hacen especial, gracias por el poco tiempo que llevamos conociéndonos, me has sacado risas y canas verdes, te considero una amiga muy cercana a mí que sin dudarlo te diría mis problemas, te quiero mucho mucho mucho amiguita.`;
 
 
+/* LOGIN */
 function login(){
 
 var usuario="evangeline";
@@ -107,26 +148,54 @@ var p=document.getElementById("pass").value;
 if(u==usuario && p==contraseña){
 
 document.getElementById("login").style.display="none";
+document.getElementById("regaloBox").style.display="block";
+
+}else{
+alert("Usuario o contraseña incorrectos");
+}
+
+}
+
+/* MOSTRAR INPUT BONITO */
+function mostrarSegundaClave(){
+document.getElementById("regaloBox").style.display="none";
+document.getElementById("segundaClaveBox").style.display="block";
+}
+
+/* VALIDAR SEGUNDA CONTRASEÑA */
+function verificarSegundaClave(){
+
+let clave = document.getElementById("segundaClave").value;
+
+if(clave === "Me encantan tus ojos"){
+
+document.getElementById("segundaClaveBox").style.display="none";
 document.getElementById("mensaje").style.display="block";
+
+carta += `
+
+✨ Déjame hacer que esos ojos brillen aún más ✨
+
+Si llegaste hasta aquí... tienes que decir la palabra mágica:
+👉 REGALO 👈 al dueño de esto 😏`;
 
 escribirTexto();
 estrellas();
 
 }else{
-
-alert("Usuario o contraseña incorrectos");
-
+alert("Contraseña incorrecta 😝");
 }
 
 }
 
-/* TEXTO QUE SE ESCRIBE */
-
+/* EFECTO ESCRITURA */
 function escribirTexto(){
 
 let i = 0;
 let velocidad = 35;
 let texto = document.getElementById("texto");
+
+texto.innerHTML = "";
 
 function escribir(){
 
@@ -134,7 +203,6 @@ if(i < carta.length){
 
 texto.innerHTML += carta.charAt(i);
 i++;
-
 setTimeout(escribir, velocidad);
 
 }
@@ -145,8 +213,7 @@ escribir();
 
 }
 
-/* ESTRELLITAS */
-
+/* ESTRELLAS */
 function estrellas(){
 
 const canvas = document.getElementById("estrellas");
@@ -155,60 +222,50 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+window.addEventListener("resize", () => {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+});
+
 let stars = [];
 
 for(let i=0;i<120;i++){
-
 stars.push({
 x: Math.random()*canvas.width,
 y: Math.random()*canvas.height,
 size: Math.random()*2+1,
 speed: Math.random()*1+0.3
 });
-
 }
 
 function draw(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
-
 ctx.fillStyle="white";
 
 for(let i=0;i<stars.length;i++){
-
 let s = stars[i];
-
 ctx.beginPath();
 ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
 ctx.fill();
-
 }
 
 update();
-
 }
 
 function update(){
-
 for(let i=0;i<stars.length;i++){
-
 let s = stars[i];
-
 s.y += s.speed;
 
 if(s.y > canvas.height){
-
 s.y = 0;
 s.x = Math.random()*canvas.width;
-
 }
-
 }
-
 }
 
 setInterval(draw,20);
-
 }
 
 </script>
