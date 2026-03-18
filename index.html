@@ -44,15 +44,20 @@ color:white;
 
 /* REGALO */
 #regalo{
-font-size:70px;
+font-size:22px;
 cursor:pointer;
 animation: brincar 1s infinite;
 margin-top:40px;
+background:#ff4d6d;
+color:white;
+border:none;
+padding:15px 25px;
+border-radius:12px;
 }
 
 @keyframes brincar{
 0%{transform:translateY(0);}
-50%{transform:translateY(-20px);}
+50%{transform:translateY(-15px);}
 100%{transform:translateY(0);}
 }
 
@@ -77,10 +82,52 @@ font-size:20px;
 margin-top:30px;
 }
 
-/* INPUT BONITO (segunda contraseña) */
+/* SEGUNDA CLAVE */
 #segundaClaveBox{
 display:none;
 margin-top:50px;
+}
+
+/* POPUP */
+#popupFinal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+z-index:10;
+}
+
+.popupContenido{
+background:#111;
+padding:25px;
+border-radius:15px;
+width:85%;
+max-width:320px;
+text-align:center;
+animation: aparecer 0.5s ease;
+}
+
+.popupContenido h2{
+color:#ff4d6d;
+}
+
+.popupContenido button{
+margin-top:15px;
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#ff4d6d;
+color:white;
+}
+
+@keyframes aparecer{
+from{transform:scale(0.7); opacity:0;}
+to{transform:scale(1); opacity:1;}
 }
 
 canvas{
@@ -108,10 +155,13 @@ pointer-events:none;
 <!-- REGALO -->
 <div id="regaloBox" style="display:none;">
 <h2>Tengo algo para ti 🎁</h2>
-<div id="regalo" onclick="mostrarSegundaClave()">🎁</div>
+
+<button id="regalo" onclick="mostrarSegundaClave()">
+🎁 Abrir regalo 🎁
+</button>
 </div>
 
-<!-- SEGUNDA CONTRASEÑA BONITA -->
+<!-- SEGUNDA CONTRASEÑA -->
 <div id="segundaClaveBox">
 <h3>Ups... contraseña 👀</h3>
 <input type="password" id="segundaClave" placeholder="Escríbela aquí"><br>
@@ -125,6 +175,19 @@ pointer-events:none;
 <div class="att">
 ATT: EL CRACK, IDOLO, GUAPO, ASOMBROZO DE TU AMIGUITO.
 </div>
+</div>
+
+<!-- POPUP FINAL -->
+<div id="popupFinal">
+  <div class="popupContenido">
+    <h2>✨ Sorpresa ✨</h2>
+    <p>Déjame hacer que esos ojos brillen aún más 💖</p>
+    <p>Si llegaste hasta aquí... tienes que decir la palabra mágica:</p>
+    <h3>👉 REGALO 👈</h3>
+    <p>al dueño de esto 😏</p>
+
+    <button onclick="cerrarPopup()">Cerrar</button>
+  </div>
 </div>
 
 <canvas id="estrellas"></canvas>
@@ -156,13 +219,13 @@ alert("Usuario o contraseña incorrectos");
 
 }
 
-/* MOSTRAR INPUT BONITO */
+/* MOSTRAR SEGUNDA CLAVE */
 function mostrarSegundaClave(){
 document.getElementById("regaloBox").style.display="none";
 document.getElementById("segundaClaveBox").style.display="block";
 }
 
-/* VALIDAR SEGUNDA CONTRASEÑA */
+/* VALIDAR SEGUNDA CLAVE */
 function verificarSegundaClave(){
 
 let clave = document.getElementById("segundaClave").value;
@@ -171,13 +234,6 @@ if(clave === "Me encantan tus ojos"){
 
 document.getElementById("segundaClaveBox").style.display="none";
 document.getElementById("mensaje").style.display="block";
-
-carta += `
-
-✨ Déjame hacer que esos ojos brillen aún más ✨
-
-Si llegaste hasta aquí... tienes que decir la palabra mágica:
-👉 REGALO 👈 al dueño de esto 😏`;
 
 escribirTexto();
 estrellas();
@@ -188,7 +244,7 @@ alert("Contraseña incorrecta 😝");
 
 }
 
-/* EFECTO ESCRITURA */
+/* ESCRITURA */
 function escribirTexto(){
 
 let i = 0;
@@ -205,12 +261,23 @@ texto.innerHTML += carta.charAt(i);
 i++;
 setTimeout(escribir, velocidad);
 
+}else{
+setTimeout(mostrarPopup, 800);
 }
 
 }
 
 escribir();
 
+}
+
+/* POPUP */
+function mostrarPopup(){
+document.getElementById("popupFinal").style.display = "flex";
+}
+
+function cerrarPopup(){
+document.getElementById("popupFinal").style.display = "none";
 }
 
 /* ESTRELLAS */
